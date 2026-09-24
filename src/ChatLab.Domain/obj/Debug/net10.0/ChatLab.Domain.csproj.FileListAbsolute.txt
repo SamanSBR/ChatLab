@@ -9,3 +9,4 @@
 /home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/refint/ChatLab.Domain.dll
 /home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.pdb
 /home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ref/ChatLab.Domain.dll
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.sourcelink.json

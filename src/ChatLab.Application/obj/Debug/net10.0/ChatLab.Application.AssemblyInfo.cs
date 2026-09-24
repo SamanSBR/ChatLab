@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChatLab.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e552334f3d9d4c3fc09deb7919b3b63dde92a2d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChatLab.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChatLab.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

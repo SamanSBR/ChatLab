@@ -1,0 +1,5 @@
+**/bin/
+**/obj/
+src/ChatLab.Web/chatlab.db
+src/ChatLab.Web/chatlab.db-shm
+src/ChatLab.Web/chatlab.db-wal

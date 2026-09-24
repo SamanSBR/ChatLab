@@ -8,13 +8,13 @@
     ".NETCoreApp,Version=v10.0": {
       "ChatLab.Application/1.0.0": {
         "dependencies": {
-          "ChatLab.Domain": "1.0.0.0"
+          "ChatLab.Domain": "1.0.0"
         },
         "runtime": {
           "ChatLab.Application.dll": {}
         }
       },
-      "ChatLab.Domain/1.0.0.0": {
+      "ChatLab.Domain/1.0.0": {
         "runtime": {
           "ChatLab.Domain.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -30,8 +30,8 @@
       "serviceable": false,
       "sha512": ""
     },
-    "ChatLab.Domain/1.0.0.0": {
-      "type": "reference",
+    "ChatLab.Domain/1.0.0": {
+      "type": "project",
       "serviceable": false,
       "sha512": ""
     }

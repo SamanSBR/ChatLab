@@ -393,6 +393,16 @@
         "build": {
           "build/net8.0/xunit.runner.visualstudio.props": {}
         }
+      },
+      "ChatLab.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/ChatLab.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ChatLab.Domain.dll": {}
+        }
       }
     }
   },
@@ -903,10 +913,16 @@
         "xunit.runner.visualstudio.3.1.4.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "ChatLab.Domain/1.0.0": {
+      "type": "project",
+      "path": "../../src/ChatLab.Domain/ChatLab.Domain.csproj",
+      "msbuildProject": "../../src/ChatLab.Domain/ChatLab.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "ChatLab.Domain >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.14.1",
       "coverlet.collector >= 6.0.4",
       "xunit >= 2.9.3",
@@ -938,7 +954,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/home/sami/Projects/ChatLab/src/ChatLab.Domain/ChatLab.Domain.csproj": {
+              "projectPath": "/home/sami/Projects/ChatLab/src/ChatLab.Domain/ChatLab.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
