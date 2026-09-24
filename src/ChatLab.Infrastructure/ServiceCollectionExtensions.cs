@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddDbContext<ChatLabDbContext>(options => options.UseSqlite(connectionString));
         services.AddScoped<IResearchSessionRepository, SqliteResearchSessionRepository>();
+        services.AddSingleton<IAnomalyDetectionService, DeterministicAnomalyDetectionService>();
         return services;
     }
 }

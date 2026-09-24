@@ -7,6 +7,7 @@ public sealed class ChatLabDbContext(DbContextOptions<ChatLabDbContext> options)
 {
     public DbSet<ResearchSession> ResearchSessions => Set<ResearchSession>();
     public DbSet<WebRtcSample> WebRtcSamples => Set<WebRtcSample>();
+    public DbSet<AnomalyEvent> AnomalyEvents => Set<AnomalyEvent>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,12 +27,24 @@ public sealed class ChatLabDbContext(DbContextOptions<ChatLabDbContext> options)
             entity.Property(x => x.ConnectionState).HasMaxLength(50).IsRequired();
             entity.Property(x => x.IceConnectionState).HasMaxLength(50).IsRequired();
             entity.Property(x => x.SignalingState).HasMaxLength(50).IsRequired();
+            entity.Property(x => x.UiState).HasMaxLength(50).IsRequired();
             entity.Property(x => x.InboundCodec).HasMaxLength(200);
             entity.Property(x => x.OutboundCodec).HasMaxLength(200);
             entity.Property(x => x.LocalCandidateType).HasMaxLength(50);
             entity.Property(x => x.RemoteCandidateType).HasMaxLength(50);
             entity.Property(x => x.SelectedCandidatePairId).HasMaxLength(200);
             entity.HasIndex(x => new { x.ResearchSessionId, x.CapturedAtUtc });
+        });
+
+        modelBuilder.Entity<AnomalyEvent>(entity =>
+        {
+            entity.ToTable("AnomalyEvents");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Type).HasConversion<string>().HasMaxLength(100).IsRequired();
+            entity.Property(x => x.Severity).HasConversion<string>().HasMaxLength(50).IsRequired();
+            entity.Property(x => x.Evidence).HasMaxLength(2_000).IsRequired();
+            entity.HasIndex(x => new { x.ResearchSessionId, x.OccurredAtUtc });
+            entity.HasIndex(x => new { x.WebRtcSampleId, x.Type }).IsUnique();
         });
     }
 
@@ -60,6 +73,7 @@ public sealed class ChatLabDbContext(DbContextOptions<ChatLabDbContext> options)
                 ["AvailableIncomingBitrateKbps"] = "REAL NULL",
                 ["AvailableOutgoingBitrateKbps"] = "REAL NULL",
                 ["SelectedCandidatePairId"] = "TEXT NULL"
+                ,["UiState"] = "TEXT NOT NULL DEFAULT 'unknown'"
             };
 
             foreach (var (column, definition) in additions.Where(x => !columns.Contains(x.Key)))
@@ -68,6 +82,21 @@ public sealed class ChatLabDbContext(DbContextOptions<ChatLabDbContext> options)
                 alterCommand.CommandText = $"ALTER TABLE \"WebRtcSamples\" ADD COLUMN \"{column}\" {definition};";
                 await alterCommand.ExecuteNonQueryAsync(cancellationToken);
             }
+
+            await using var anomalyCommand = connection.CreateCommand();
+            anomalyCommand.CommandText = """
+                CREATE TABLE IF NOT EXISTS \"AnomalyEvents\" (
+                    \"Id\" TEXT NOT NULL CONSTRAINT \"PK_AnomalyEvents\" PRIMARY KEY,
+                    \"ResearchSessionId\" TEXT NOT NULL,
+                    \"WebRtcSampleId\" TEXT NOT NULL,
+                    \"OccurredAtUtc\" TEXT NOT NULL,
+                    \"Type\" TEXT NOT NULL,
+                    \"Severity\" TEXT NOT NULL,
+                    \"Evidence\" TEXT NOT NULL);
+                CREATE UNIQUE INDEX IF NOT EXISTS \"IX_AnomalyEvents_WebRtcSampleId_Type\" ON \"AnomalyEvents\" (\"WebRtcSampleId\", \"Type\");
+                CREATE INDEX IF NOT EXISTS \"IX_AnomalyEvents_ResearchSessionId_OccurredAtUtc\" ON \"AnomalyEvents\" (\"ResearchSessionId\", \"OccurredAtUtc\");
+                """;
+            await anomalyCommand.ExecuteNonQueryAsync(cancellationToken);
         }
         finally
         {

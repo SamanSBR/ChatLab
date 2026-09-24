@@ -10,7 +10,7 @@ public sealed class SqliteResearchSessionRepository(ChatLabDbContext db) : IRese
     {
         // SQLite cannot translate DateTimeOffset ordering; sessions are local research data,
         // so order after materialization until a provider-specific timestamp conversion is added.
-        var sessions = await db.ResearchSessions.AsNoTracking().ToListAsync(cancellationToken);
+        var sessions = await db.ResearchSessions.AsNoTracking().Include(x => x.WebRtcSamples).ToListAsync(cancellationToken);
         return sessions.OrderByDescending(s => s.StartedAtUtc).Take(take).ToList();
     }
 
@@ -35,5 +35,25 @@ public sealed class SqliteResearchSessionRepository(ChatLabDbContext db) : IRese
     {
         var samples = await db.WebRtcSamples.AsNoTracking().ToListAsync(cancellationToken);
         return samples.OrderByDescending(x => x.CapturedAtUtc).FirstOrDefault();
+    }
+
+    public async Task<IReadOnlyList<WebRtcSample>> GetSamplesAsync(Guid sessionId, CancellationToken cancellationToken = default)
+    {
+        var samples = await db.WebRtcSamples.AsNoTracking().Where(x => x.ResearchSessionId == sessionId).ToListAsync(cancellationToken);
+        return samples.OrderBy(x => x.CapturedAtUtc).ToList();
+    }
+
+    public async Task AddAnomaliesAsync(IEnumerable<AnomalyEvent> anomalies, CancellationToken cancellationToken = default)
+    {
+        var items = anomalies.ToList();
+        if (items.Count == 0) return;
+        db.AnomalyEvents.AddRange(items);
+        await db.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<AnomalyEvent>> GetAnomaliesAsync(Guid sessionId, CancellationToken cancellationToken = default)
+    {
+        var events = await db.AnomalyEvents.AsNoTracking().Where(x => x.ResearchSessionId == sessionId).ToListAsync(cancellationToken);
+        return events.OrderBy(x => x.OccurredAtUtc).ToList();
     }
 }

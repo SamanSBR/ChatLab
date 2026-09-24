@@ -36,6 +36,29 @@ else
 {
     <p>Loading sessions…</p>
 }
+
+<h2>Technical-observation timeline</h2>
+<p>These deterministic observations indicate telemetry/UI mismatches or connection transitions; they do not imply intent, security impact, or user behavior.</p>
+@if (timeline is null)
+{
+    <p>Loading timeline…</p>
+}
+else if (timeline.Count == 0)
+{
+    <p>No anomaly events recorded.</p>
+}
+else
+{
+    <table class="table table-sm">
+        <thead><tr><th>Time (UTC)</th><th>Session</th><th>Observation</th><th>Technical significance</th><th>Evidence</th></tr></thead>
+        <tbody>
+        @foreach (var item in timeline)
+        {
+            <tr><td>@item.Event.OccurredAtUtc.ToString("u")</td><td>@item.SessionLabel</td><td>@item.Event.Type</td><td>@item.Event.Severity</td><td>@item.Event.Evidence</td></tr>
+        }
+        </tbody>
+    </table>
+}
 else if (recentSessions.Count == 0)
 {
     <p>No sessions recorded. This dashboard is ready for the future browser telemetry adapter.</p>
@@ -45,7 +68,7 @@ else
     <table class="table">
         <thead><tr><th>Label</th><th>Started (UTC)</th><th>Ended (UTC)</th><th>Samples</th></tr></thead>
         <tbody>
-        @foreach (var session in recentSessions)
+        @foreach (var session in recentSessions!)
         {
             <tr><td>@session.Label</td><td>@session.StartedAtUtc.ToString("u")</td><td>@(session.EndedAtUtc?.ToString("u") ?? "Active")</td><td>@session.WebRtcSamples.Count</td></tr>
         }
@@ -57,6 +80,7 @@ else
     private int sessionCount;
     private IReadOnlyList<ResearchSession>? recentSessions;
     private WebRtcSample? latestSample;
+    private IReadOnlyList<TimelineItem>? timeline;
     private readonly CancellationTokenSource refreshCancellation = new();
     private Task? refreshTask;
 
@@ -65,6 +89,8 @@ else
         sessionCount = await Sessions.CountAsync();
         recentSessions = await Sessions.GetRecentAsync(10);
         latestSample = await Sessions.GetLatestSampleAsync();
+        timeline = (await Task.WhenAll(recentSessions.Select(async session =>
+            (await Sessions.GetAnomaliesAsync(session.Id)).Select(anomaly => new TimelineItem(session.Label, anomaly))))).SelectMany(x => x).OrderByDescending(x => x.Event.OccurredAtUtc).ToList();
         refreshTask = RefreshLatestSampleAsync();
     }
 
@@ -87,4 +113,5 @@ else
     private static string Value(long? value) => value?.ToString() ?? "unavailable";
     private static string Milliseconds(double? value) => value is null ? "unavailable" : $"{value:0.##} ms";
     private static string Kbps(double? value) => value is null ? "unavailable" : $"{value:0.##} kbps";
+    private sealed record TimelineItem(string SessionLabel, AnomalyEvent Event);
 }

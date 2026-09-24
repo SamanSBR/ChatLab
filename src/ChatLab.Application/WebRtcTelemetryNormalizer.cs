@@ -11,7 +11,7 @@ public static class WebRtcTelemetryNormalizer
         source.ConnectionState ?? "unknown",
         source.IceConnectionState ?? "unknown",
         source.SignalingState ?? "unknown",
-        NonNegative(source.BytesReceived), NonNegative(source.BytesSent),
+        NonNegative(source.BytesReceived), NonNegative(source.BytesSent), source.UiState,
         NonNegativeNullable(source.PacketsReceived),
         null, null,
         ToMilliseconds(source.CurrentRoundTripTimeSeconds), ToMilliseconds(source.JitterSeconds), NonNegativeNullable(source.PacketsLost),

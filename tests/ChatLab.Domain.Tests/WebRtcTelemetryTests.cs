@@ -9,7 +9,7 @@ public sealed class WebRtcTelemetryTests
     public void Normalize_ConvertsBrowserUnitsAndGracefullyHandlesUnavailableFields()
     {
         var capturedAt = new DateTimeOffset(2026, 9, 24, 12, 0, 0, TimeSpan.Zero);
-        var dto = new WebRtcTelemetrySampleDto(capturedAt, "CONNECTED", "completed", "stable", 1200, 900, null, -1, 42, null, .015, 7, 3, 2, .25, 1_500_000, null, "host", "relay", "pair-1", "audio/opus", null);
+        var dto = new WebRtcTelemetrySampleDto(capturedAt, "CONNECTED", "completed", "stable", "connected", 1200, 900, null, -1, 42, null, .015, 7, 3, 2, .25, 1_500_000, null, "host", "relay", "pair-1", "audio/opus", null);
 
         var sample = WebRtcTelemetryNormalizer.Normalize(Guid.NewGuid(), dto);
 

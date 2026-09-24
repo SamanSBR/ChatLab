@@ -206,4 +206,4 @@
 /home/sami/Projects/ChatLab/src/ChatLab.Web/obj/Debug/net10.0/ChatLab.Web.pdb
 /home/sami/Projects/ChatLab/src/ChatLab.Web/obj/Debug/net10.0/ChatLab.Web.genruntimeconfig.cache
 /home/sami/Projects/ChatLab/src/ChatLab.Web/obj/Debug/net10.0/ref/ChatLab.Web.dll
-/home/sami/Projects/ChatLab/src/ChatLab.Web/obj/Debug/net10.0/compressed/qlxfxgatqx-{0}-qnig2tnifk-qnig2tnifk.gz
+/home/sami/Projects/ChatLab/src/ChatLab.Web/obj/Debug/net10.0/compressed/qlxfxgatqx-{0}-gfgtbtmb01-gfgtbtmb01.gz

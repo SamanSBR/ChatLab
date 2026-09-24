@@ -9,6 +9,7 @@ public sealed class WebRtcSample
     public string ConnectionState { get; private set; } = "unknown";
     public string IceConnectionState { get; private set; } = "unknown";
     public string SignalingState { get; private set; } = "unknown";
+    public string UiState { get; private set; } = "unknown";
     public long InboundBytes { get; private set; }
     public long OutboundBytes { get; private set; }
     public long? PacketsReceived { get; private set; }
@@ -34,6 +35,7 @@ public sealed class WebRtcSample
 
     public WebRtcSample(Guid researchSessionId, DateTimeOffset capturedAtUtc,
         string connectionState, string iceConnectionState, string signalingState, long inboundBytes, long outboundBytes,
+        string? uiState = null,
         long? packetsReceived = null,
         double? inboundBitrateKbps = null, double? outboundBitrateKbps = null,
         double? roundTripTimeMs = null, double? jitterMs = null, long? packetsLost = null,
@@ -51,6 +53,7 @@ public sealed class WebRtcSample
         ConnectionState = NormalizeState(connectionState);
         IceConnectionState = NormalizeState(iceConnectionState);
         SignalingState = NormalizeState(signalingState);
+        UiState = NormalizeState(uiState ?? "unknown");
         InboundBytes = inboundBytes;
         OutboundBytes = outboundBytes;
         PacketsReceived = packetsReceived;

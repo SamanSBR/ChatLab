@@ -1,0 +1,54 @@
+@page "/compare"
+@rendermode InteractiveServer
+@inject IResearchSessionRepository Sessions
+
+<PageTitle>Compare sessions</PageTitle>
+
+<h1>Session comparison</h1>
+<p>Compare deterministic technical observations across consented research sessions. Counts are not security findings or statements about intent.</p>
+
+@if (sessions is null)
+{
+    <p>Loading sessions…</p>
+}
+else if (sessions.Count < 2)
+{
+    <p>Record at least two sessions to compare them.</p>
+}
+else
+{
+    <div class="row g-3 mb-3">
+        <div class="col-md-5"><label class="form-label">First session</label><select class="form-select" @bind="leftId">@foreach (var session in sessions) { <option value="@session.Id">@session.Label (@session.StartedAtUtc.ToString("u"))</option> }</select></div>
+        <div class="col-md-5"><label class="form-label">Second session</label><select class="form-select" @bind="rightId">@foreach (var session in sessions) { <option value="@session.Id">@session.Label (@session.StartedAtUtc.ToString("u"))</option> }</select></div>
+        <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary" @onclick="CompareAsync">Compare</button></div>
+    </div>
+    @if (comparison is not null)
+    {
+        <table class="table"><thead><tr><th>Observation</th><th>@comparison.LeftLabel</th><th>@comparison.RightLabel</th></tr></thead><tbody>
+        @foreach (var type in Enum.GetValues<AnomalyType>()) { <tr><td>@type</td><td>@comparison.Left.Count(x => x.Type == type)</td><td>@comparison.Right.Count(x => x.Type == type)</td></tr> }
+        </tbody></table>
+    }
+}
+
+@code {
+    private IReadOnlyList<ResearchSession>? sessions;
+    private Guid leftId;
+    private Guid rightId;
+    private Comparison? comparison;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sessions = await Sessions.GetRecentAsync(100);
+        if (sessions.Count >= 2) { leftId = sessions[0].Id; rightId = sessions[1].Id; await CompareAsync(); }
+    }
+
+    private async Task CompareAsync()
+    {
+        if (sessions is null) return;
+        var left = sessions.Single(x => x.Id == leftId);
+        var right = sessions.Single(x => x.Id == rightId);
+        comparison = new(left.Label, right.Label, await Sessions.GetAnomaliesAsync(leftId), await Sessions.GetAnomaliesAsync(rightId));
+    }
+
+    private sealed record Comparison(string LeftLabel, string RightLabel, IReadOnlyList<AnomalyEvent> Left, IReadOnlyList<AnomalyEvent> Right);
+}

@@ -6,6 +6,7 @@ public sealed record WebRtcTelemetrySampleDto(
     string? ConnectionState,
     string? IceConnectionState,
     string? SignalingState,
+    string? UiState,
     long? BytesReceived,
     long? BytesSent,
     long? PacketsReceived,

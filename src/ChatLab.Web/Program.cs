@@ -52,16 +52,18 @@ telemetry.MapPost("/sessions", async (CreateResearchSessionRequest request, IRes
     return Results.Created($"/api/sessions/{session.Id}", new { session.Id });
 });
 
-telemetry.MapPost("/sessions/{sessionId:guid}/webrtc-samples", async (Guid sessionId, WebRtcTelemetrySampleDto input, IResearchSessionRepository sessions, ILogger<Program> logger, CancellationToken cancellationToken) =>
+telemetry.MapPost("/sessions/{sessionId:guid}/webrtc-samples", async (Guid sessionId, WebRtcTelemetrySampleDto input, IResearchSessionRepository sessions, IAnomalyDetectionService detector, ILogger<Program> logger, CancellationToken cancellationToken) =>
 {
     if (await sessions.GetAsync(sessionId, cancellationToken) is null) return Results.NotFound();
 
     var sample = WebRtcTelemetryNormalizer.Normalize(sessionId, input);
+    var precedingSamples = await sessions.GetSamplesAsync(sessionId, cancellationToken);
     await sessions.AddSampleAsync(sample, cancellationToken);
-    var anomalies = WebRtcAnomalyRules.Evaluate(sample);
+    var anomalies = detector.Detect(sample, precedingSamples);
+    await sessions.AddAnomaliesAsync(anomalies, cancellationToken);
     logger.LogInformation("Stored WebRTC sample for session {ResearchSessionId}: connection={ConnectionState}, ice={IceConnectionState}, inboundBytes={InboundBytes}, outboundBytes={OutboundBytes}, anomalies={AnomalyCount}", sessionId, sample.ConnectionState, sample.IceConnectionState, sample.InboundBytes, sample.OutboundBytes, anomalies.Count);
     if (anomalies.Count > 0)
-        logger.LogWarning("WebRTC anomalies for session {ResearchSessionId}: {AnomalyCodes}", sessionId, string.Join(',', anomalies.Select(x => x.Code)));
+        logger.LogWarning("WebRTC technical observations for session {ResearchSessionId}: {AnomalyTypes}", sessionId, string.Join(',', anomalies.Select(x => x.Type)));
     return Results.Accepted($"/api/sessions/{sessionId}/webrtc-samples");
 });
 
