@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "ChatLab.Domain.Tests/1.0.0": {
         "dependencies": {
+          "ChatLab.Application": "1.0.0",
           "ChatLab.Domain": "1.0.0",
           "Microsoft.NET.Test.Sdk": "17.14.1",
           "xunit": "2.9.3"
@@ -331,6 +332,17 @@
           }
         }
       },
+      "ChatLab.Application/1.0.0": {
+        "dependencies": {
+          "ChatLab.Domain": "1.0.0"
+        },
+        "runtime": {
+          "ChatLab.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "ChatLab.Domain/1.0.0": {
         "runtime": {
           "ChatLab.Domain.dll": {
@@ -423,6 +435,11 @@
       "sha512": "sha512-yMb6vMESlSrE3Wfj7V6cjQ3S4TXdXpRqYeNEI3zsX31uTsGMJjEw6oD5F5u1cHnMptjhEECnmZSsPxB6ChZHDQ==",
       "path": "xunit.extensibility.execution/2.9.3",
       "hashPath": "xunit.extensibility.execution.2.9.3.nupkg.sha512"
+    },
+    "ChatLab.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "ChatLab.Domain/1.0.0": {
       "type": "project",

@@ -21,4 +21,19 @@ public sealed class SqliteResearchSessionRepository(ChatLabDbContext db) : IRese
         db.ResearchSessions.Add(session);
         await db.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<ResearchSession?> GetAsync(Guid id, CancellationToken cancellationToken = default) =>
+        db.ResearchSessions.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public async Task AddSampleAsync(WebRtcSample sample, CancellationToken cancellationToken = default)
+    {
+        db.WebRtcSamples.Add(sample);
+        await db.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<WebRtcSample?> GetLatestSampleAsync(CancellationToken cancellationToken = default)
+    {
+        var samples = await db.WebRtcSamples.AsNoTracking().ToListAsync(cancellationToken);
+        return samples.OrderByDescending(x => x.CapturedAtUtc).FirstOrDefault();
+    }
 }

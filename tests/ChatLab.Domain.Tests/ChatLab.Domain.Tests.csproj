@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ChatLab.Domain\ChatLab.Domain.csproj" />
+    <ProjectReference Include="..\..\src\ChatLab.Application\ChatLab.Application.csproj" />
   </ItemGroup>
 
 </Project>

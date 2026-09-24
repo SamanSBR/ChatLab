@@ -16,9 +16,10 @@ public sealed class ResearchSessionTests
     [Fact]
     public void Sample_NormalizesConnectionStates()
     {
-        var sample = new WebRtcSample(Guid.NewGuid(), DateTimeOffset.UtcNow, " CONNECTED ", "Checking", 0, 0);
+        var sample = new WebRtcSample(Guid.NewGuid(), DateTimeOffset.UtcNow, " CONNECTED ", "Checking", "Stable", 0, 0);
 
         Assert.Equal("connected", sample.ConnectionState);
         Assert.Equal("checking", sample.IceConnectionState);
+        Assert.Equal("stable", sample.SignalingState);
     }
 }

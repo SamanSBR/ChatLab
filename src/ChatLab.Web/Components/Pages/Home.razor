@@ -1,5 +1,7 @@
 @page "/"
+@rendermode InteractiveServer
 @inject IResearchSessionRepository Sessions
+@implements IDisposable
 
 <PageTitle>ChatLab Inspector</PageTitle>
 
@@ -7,8 +9,26 @@
 <p class="lead">A local dashboard for consented WebRTC research sessions.</p>
 
 <div class="alert alert-info" role="status">
-    <strong>@sessionCount</strong> research session@(sessionCount == 1 ? string.Empty : "s") recorded. Browser collection and external integrations are not enabled yet.
+    <strong>@sessionCount</strong> research session@(sessionCount == 1 ? string.Empty : "s") recorded. Browser collection is opt-in and limited to an existing peer connection you control.
 </div>
+
+<h2>Current telemetry</h2>
+@if (latestSample is null)
+{
+    <p>No WebRTC samples received yet.</p>
+}
+else
+{
+    <table class="table table-sm">
+        <tbody>
+            <tr><th>Captured (UTC)</th><td>@latestSample.CapturedAtUtc.ToString("u")</td><th>Connection / ICE / signaling</th><td>@latestSample.ConnectionState / @latestSample.IceConnectionState / @latestSample.SignalingState</td></tr>
+            <tr><th>Inbound</th><td>@latestSample.InboundBytes bytes; @Value(latestSample.PacketsReceived) packets; @Value(latestSample.PacketsLost) lost; @Value(latestSample.FramesReceived) received; @Value(latestSample.FramesDecoded) decoded</td><th>Outbound</th><td>@latestSample.OutboundBytes bytes; @Value(latestSample.PacketsSent) packets; @Value(latestSample.FramesEncoded) encoded; @Value(latestSample.FramesSent) sent</td></tr>
+            <tr><th>RTT / jitter</th><td>@Milliseconds(latestSample.RoundTripTimeMs) / @Milliseconds(latestSample.JitterMs)</td><th>Available bitrate</th><td>@Kbps(latestSample.AvailableIncomingBitrateKbps) in / @Kbps(latestSample.AvailableOutgoingBitrateKbps) out</td></tr>
+            <tr><th>ICE candidates</th><td>@(latestSample.LocalCandidateType ?? "unavailable") → @(latestSample.RemoteCandidateType ?? "unavailable")</td><th>Selected pair</th><td>@(latestSample.SelectedCandidatePairId ?? "unavailable")</td></tr>
+            <tr><th>Codecs</th><td colspan="3">Inbound: @(latestSample.InboundCodec ?? "unavailable"); outbound: @(latestSample.OutboundCodec ?? "unavailable")</td></tr>
+        </tbody>
+    </table>
+}
 
 <h2>Recent sessions</h2>
 
@@ -36,10 +56,35 @@ else
 @code {
     private int sessionCount;
     private IReadOnlyList<ResearchSession>? recentSessions;
+    private WebRtcSample? latestSample;
+    private readonly CancellationTokenSource refreshCancellation = new();
+    private Task? refreshTask;
 
     protected override async Task OnInitializedAsync()
     {
         sessionCount = await Sessions.CountAsync();
         recentSessions = await Sessions.GetRecentAsync(10);
+        latestSample = await Sessions.GetLatestSampleAsync();
+        refreshTask = RefreshLatestSampleAsync();
     }
+
+    private async Task RefreshLatestSampleAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(refreshCancellation.Token))
+            {
+                latestSample = await Sessions.GetLatestSampleAsync(refreshCancellation.Token);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    public void Dispose() => refreshCancellation.Cancel();
+
+    private static string Value(long? value) => value?.ToString() ?? "unavailable";
+    private static string Milliseconds(double? value) => value is null ? "unavailable" : $"{value:0.##} ms";
+    private static string Kbps(double? value) => value is null ? "unavailable" : $"{value:0.##} kbps";
 }
