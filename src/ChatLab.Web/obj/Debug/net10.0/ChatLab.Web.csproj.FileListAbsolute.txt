@@ -1,0 +1,2 @@
+/home/sami/Projects/ChatLab/src/ChatLab.Web/obj/Debug/net10.0/EmbeddedAttribute.cs
+/home/sami/Projects/ChatLab/src/ChatLab.Web/obj/Debug/net10.0/ValidatableTypeAttribute.cs

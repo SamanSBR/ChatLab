@@ -1,0 +1,45 @@
+@page "/"
+@inject IResearchSessionRepository Sessions
+
+<PageTitle>ChatLab Inspector</PageTitle>
+
+<h1>ChatLab Inspector</h1>
+<p class="lead">A local dashboard for consented WebRTC research sessions.</p>
+
+<div class="alert alert-info" role="status">
+    <strong>@sessionCount</strong> research session@(sessionCount == 1 ? string.Empty : "s") recorded. Browser collection and external integrations are not enabled yet.
+</div>
+
+<h2>Recent sessions</h2>
+
+@if (recentSessions is null)
+{
+    <p>Loading sessions…</p>
+}
+else if (recentSessions.Count == 0)
+{
+    <p>No sessions recorded. This dashboard is ready for the future browser telemetry adapter.</p>
+}
+else
+{
+    <table class="table">
+        <thead><tr><th>Label</th><th>Started (UTC)</th><th>Ended (UTC)</th><th>Samples</th></tr></thead>
+        <tbody>
+        @foreach (var session in recentSessions)
+        {
+            <tr><td>@session.Label</td><td>@session.StartedAtUtc.ToString("u")</td><td>@(session.EndedAtUtc?.ToString("u") ?? "Active")</td><td>@session.WebRtcSamples.Count</td></tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private int sessionCount;
+    private IReadOnlyList<ResearchSession>? recentSessions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sessionCount = await Sessions.CountAsync();
+        recentSessions = await Sessions.GetRecentAsync(10);
+    }
+}

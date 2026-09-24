@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "qaa9OyyuLr8=",
+  "success": true,
+  "projectFilePath": "/home/sami/Projects/ChatLab/src/ChatLab.Web/ChatLab.Web.csproj",
+  "expectedPackageFiles": [
+    "/home/sami/.nuget/packages/microsoft.aspnetcore.app.internal.assets/10.0.12/microsoft.aspnetcore.app.internal.assets.10.0.12.nupkg.sha512"
+  ],
+  "logs": []
+}

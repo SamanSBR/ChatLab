@@ -1,0 +1,5 @@
+/home/sami/Projects/ChatLab/src/ChatLab.Infrastructure/obj/Debug/net10.0/ChatLab.Infrastructure.csproj.AssemblyReference.cache
+/home/sami/Projects/ChatLab/src/ChatLab.Infrastructure/obj/Debug/net10.0/ChatLab.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/sami/Projects/ChatLab/src/ChatLab.Infrastructure/obj/Debug/net10.0/ChatLab.Infrastructure.AssemblyInfoInputs.cache
+/home/sami/Projects/ChatLab/src/ChatLab.Infrastructure/obj/Debug/net10.0/ChatLab.Infrastructure.AssemblyInfo.cs
+/home/sami/Projects/ChatLab/src/ChatLab.Infrastructure/obj/Debug/net10.0/ChatLab.Infrastructure.csproj.CoreCompileInputs.cache

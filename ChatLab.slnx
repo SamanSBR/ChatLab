@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ChatLab.Application/ChatLab.Application.csproj" />
+    <Project Path="src/ChatLab.Domain/ChatLab.Domain.csproj" />
+    <Project Path="src/ChatLab.Infrastructure/ChatLab.Infrastructure.csproj" />
+    <Project Path="src/ChatLab.Web/ChatLab.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ChatLab.Domain.Tests/ChatLab.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

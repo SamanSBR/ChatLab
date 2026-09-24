@@ -1,0 +1,11 @@
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/bin/Debug/net10.0/ChatLab.Domain.deps.json
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/bin/Debug/net10.0/ChatLab.Domain.dll
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/bin/Debug/net10.0/ChatLab.Domain.pdb
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.AssemblyInfoInputs.cache
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.AssemblyInfo.cs
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.csproj.CoreCompileInputs.cache
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.dll
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/refint/ChatLab.Domain.dll
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ChatLab.Domain.pdb
+/home/sami/Projects/ChatLab/src/ChatLab.Domain/obj/Debug/net10.0/ref/ChatLab.Domain.dll
