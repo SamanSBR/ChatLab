@@ -85,16 +85,16 @@ public sealed class ChatLabDbContext(DbContextOptions<ChatLabDbContext> options)
 
             await using var anomalyCommand = connection.CreateCommand();
             anomalyCommand.CommandText = """
-                CREATE TABLE IF NOT EXISTS \"AnomalyEvents\" (
-                    \"Id\" TEXT NOT NULL CONSTRAINT \"PK_AnomalyEvents\" PRIMARY KEY,
-                    \"ResearchSessionId\" TEXT NOT NULL,
-                    \"WebRtcSampleId\" TEXT NOT NULL,
-                    \"OccurredAtUtc\" TEXT NOT NULL,
-                    \"Type\" TEXT NOT NULL,
-                    \"Severity\" TEXT NOT NULL,
-                    \"Evidence\" TEXT NOT NULL);
-                CREATE UNIQUE INDEX IF NOT EXISTS \"IX_AnomalyEvents_WebRtcSampleId_Type\" ON \"AnomalyEvents\" (\"WebRtcSampleId\", \"Type\");
-                CREATE INDEX IF NOT EXISTS \"IX_AnomalyEvents_ResearchSessionId_OccurredAtUtc\" ON \"AnomalyEvents\" (\"ResearchSessionId\", \"OccurredAtUtc\");
+                CREATE TABLE IF NOT EXISTS "AnomalyEvents" (
+                    "Id" TEXT NOT NULL CONSTRAINT "PK_AnomalyEvents" PRIMARY KEY,
+                    "ResearchSessionId" TEXT NOT NULL,
+                    "WebRtcSampleId" TEXT NOT NULL,
+                    "OccurredAtUtc" TEXT NOT NULL,
+                    "Type" TEXT NOT NULL,
+                    "Severity" TEXT NOT NULL,
+                    "Evidence" TEXT NOT NULL);
+                CREATE UNIQUE INDEX IF NOT EXISTS "IX_AnomalyEvents_WebRtcSampleId_Type" ON "AnomalyEvents" ("WebRtcSampleId", "Type");
+                CREATE INDEX IF NOT EXISTS "IX_AnomalyEvents_ResearchSessionId_OccurredAtUtc" ON "AnomalyEvents" ("ResearchSessionId", "OccurredAtUtc");
                 """;
             await anomalyCommand.ExecuteNonQueryAsync(cancellationToken);
         }
