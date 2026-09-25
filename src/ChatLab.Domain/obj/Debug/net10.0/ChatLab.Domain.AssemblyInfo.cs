@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChatLab.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9d1d171cf971ddbbbdfa178051fb88dc15c872ec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+74106655a0a9fe3ab59779717a534e43dca1c031")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChatLab.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChatLab.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
